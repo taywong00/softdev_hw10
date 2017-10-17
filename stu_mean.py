@@ -48,16 +48,29 @@ def average(lst):
 
 for name in grades:
     avg = average(grades[name])
-    # I didn't bother making a new dictionary. Is this okay?
-    grades[name].insert(0, avg)
-    
+    grades[name].insert(0, avg) #the first value in the grade dict is the avg
+
 '''
 print "TEST: "
 for key in grades:
     print key + ": "
     print grades[key]
-'''    
-
+ '''
 
 
 '''3. Display each student's name, id, and average'''
+command = "SELECT name,id FROM peeps"
+stu_ids = c.execute(command)
+
+for info in stu_ids:
+    name = info[0]
+    id = info[1]
+    if name in grades:
+        grades[name].insert(0, id)
+    else:
+        grades[name] = []
+        grades[name].insert(0, id) #first value in the grade dict is now the id, second is the avg
+
+#display info
+for key in grades: #key = name #note: must change floats/int avgs to str type in order to concatinate
+    print "\n\nNAME: " + key + "\nID: " + str(grades[key][0]) + "\nAVERAGE: " + str(grades[key][1])
