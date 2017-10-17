@@ -55,7 +55,7 @@ print "TEST: "
 for key in grades:
     print key + ": "
     print grades[key]
- '''
+'''
 
 
 '''3. Display each student's name, id, and average'''
@@ -74,3 +74,27 @@ for info in stu_ids:
 #display info
 for key in grades: #key = name #note: must change floats/int avgs to str type in order to concatinate
     print "\n\nNAME: " + key + "\nID: " + str(grades[key][0]) + "\nAVERAGE: " + str(grades[key][1])
+
+
+'''4. Create a table of IDs and associated averages'''
+'''
+print "TEST: "
+for key in grades:
+    print key + ": "
+    print grades[key]
+'''
+
+try:
+    command = "CREATE TABLE peeps_avg (id INTEGER PRIMARY KEY, average NUMERIC)"
+    c.execute(command)
+except:
+    print "TABLE AVERAGES ALREADY EXISTS"
+
+
+for key in grades:
+    command = "INSERT INTO peeps_avg VALUES(" + str(grades[key][0]) + "," + str(grades[key][1]) +")"
+    c.execute(command)
+    #print str(grades[key][0])
+    #print str(grades[key][1])
+#except:
+#    print "INSERTED VALUES ALREADY EXIST"
