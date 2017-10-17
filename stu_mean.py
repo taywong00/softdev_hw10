@@ -31,16 +31,32 @@ for info in stu_info:
         grades[name] = []
         grades[name].append(mark)
 
-
+'''
 print "TEST: "
 for key in grades:
     print key + ": "
     print grades[key]
-
-
+'''
 
 '''2. Compute each student's average'''
+def average(lst):
+    total = 0;
+    for item in lst:
+        total += float(item)
+    avg = total / len(lst)
+    return avg
 
+for name in grades:
+    avg = average(grades[name])
+    # I didn't bother making a new dictionary. Is this okay?
+    grades[name].insert(0, avg)
+    
+'''
+print "TEST: "
+for key in grades:
+    print key + ": "
+    print grades[key]
+'''    
 
 
 
