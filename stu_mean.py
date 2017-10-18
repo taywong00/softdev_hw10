@@ -49,9 +49,12 @@ def average(lst):
     avg = total / len(lst)
     return avg
 
-for name in grades:
-    avg = average(grades[name])
-    grades[name].insert(0, avg) #the first value in the grade dict is the avg
+def update_dict_avg():
+    for name in grades:
+        avg = average(grades[name])
+        grades[name].insert(0, avg) #the first value in the grade dict is the avg
+
+update_dict_avg()
 
 '''
 print "TEST: "
@@ -62,64 +65,77 @@ for key in grades:
 
 '''3. Display each student's name, id, and average'''
 #insert id corresponding to name
-command = "SELECT name,id FROM peeps"
-stu_ids = c.execute(command)
+def display():
+    command = "SELECT name,id FROM peeps"
+    stu_ids = c.execute(command)
 
-for info in stu_ids:
-    name = info[0]
-    id = info[1]
-    if name in grades:
-        grades[name].insert(0, id) #insert id if name is already a key
-        #first value in the grade dict is now the id, second is the avg
-    else:
-        grades[name] = []
-        grades[name].insert(0, id) 
+    for info in stu_ids:
+        name = info[0]
+        id = info[1]
+        if name in grades:
+            grades[name].insert(0, id) #insert id if name is already a key
+            #first value in the grade dict is now the id, second is the avg
+        else:
+            grades[name] = []
+            grades[name].insert(0, id)
 
-#display info
-for key in grades: #key = name #note: must change floats/int avgs to str type in order to concatinate
-    print "\n\nNAME: " + key + "\nID: " + str(grades[key][0]) + "\nAVERAGE: " + str(grades[key][1])
+    #display info
+    for key in grades: #key = name #note: must change floats/int avgs to str type in order to concatinate
+        print "\n\nNAME: " + key + "\nID: " + str(grades[key][0]) + "\nAVERAGE: " + str(grades[key][1])
 
+display()
 
 '''4. Create a table of IDs and associated averages'''
-
-#in case table has already been created
-try:
-    command = "CREATE TABLE peeps_avg (id INTEGER PRIMARY KEY, average NUMERIC)"
-    c.execute(command)
-except:
-    print "TABLE AVERAGES ALREADY EXISTS"
-
-#in case values have already been inserted
-for key in grades:
+def id_avg_table():
+    #in case table has already been created
     try:
-        command = "INSERT INTO peeps_avg VALUES(" + str(grades[key][0]) + "," + str(grades[key][1]) + ")"
-        #print command
+        command = "CREATE TABLE peeps_avg (id INTEGER PRIMARY KEY, average NUMERIC)"
         c.execute(command)
     except:
-        print "INSERTED VALUES ALREADY EXIST"
+        print "TABLE AVERAGES ALREADY EXISTS"
+
+        #in case values have already been inserted
+    for key in grades:
+        try:
+            command = "INSERT INTO peeps_avg VALUES(" + str(grades[key][0]) + "," + str(grades[key][1]) + ")"                #print command
+            c.execute(command)
+        except:
+            print "INSERTED VALUES ALREADY EXIST"
+id_avg_table()
 
 '''5. Facilitate updating a student's average'''
 
-def update_avg():
-    for key in grades:
+def update_avg(id):
+    #for key in grades:
         #get all values not id and avg
-        comp_list = grades[key][2: ]
-        avg = average(comp_list)
+    #    comp_list = grades[key][2: ]
+    #    avg = average(comp_list)
         #replace now obsolete avg
-        grades[key].pop(1)
-        grades[key].insert(1, avg)
-    return
+    #    grades[key].pop(1)
+    #    grades[key].insert(1, avg)
 
-update_avg()
+    for name in grades:
+        if grades[name][0] == id:
+            command = "UPDATE peeps_avg SET average = " + str(average(grades[name])) + " WHERE id = " + str(id) + ";"
+            c.execute(command)
+            return command
+    #return
+
+update_avg(1)
+
 '''
 print "TEST: "
 for key in grades:
     print key + ": "
     print grades[key]
 '''
-    
+
 
 '''6. Facilitate adding rows to the courses table'''
+def update_courses():
+    command = "INSERT INTO courses VALUES " + "(\'" + row["id"] + "\', " + row["mark"] + ", " + row["code"] + ")" #Add new course
+    c.execute(command)
+    return
 
 
 #==========================================================
